@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ArmadaController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfileController;
+
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -24,3 +27,22 @@ Route::post('/logout', [AuthController::class, 'logout'])
 Route::resource('armada', ArmadaController::class)
     ->except(['show'])
     ->middleware('auth');
+
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware('auth')
+    ->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.editProfile');
+
+    Route::put('/profile', [ProfileController::class, 'updateProfile'])
+        ->name('profile.update');
+
+    Route::get('/profile/change-password', [ProfileController::class, 'editPassword'])
+        ->name('profile.password.edit');
+
+    Route::put('/profile/change-password', [ProfileController::class, 'updatePassword'])
+        ->name('profile.password.update');
+});
