@@ -21,6 +21,7 @@ class AuthController extends Controller
             'namaLengkap' => $validated['namaLengkap'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'role' => 'staff',
         ]);
 
         return redirect()
@@ -38,7 +39,23 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->route('armada.index');
+            $user = Auth::user();
+
+            if ($user->role === 'admin') {
+                return redirect()->route('dashboard');
+            }
+
+            if ($user->role === 'staff') {
+                return redirect()->route('armada.index');
+            }
+
+            Auth::logout();
+
+            return redirect()
+                ->route('login')
+                ->withErrors([
+                    'email' => 'Role pengguna tidak valid.',
+                ]);
         }
 
         return back()

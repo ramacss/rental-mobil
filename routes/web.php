@@ -8,6 +8,7 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+// Authentication
 Route::view('/login', 'auth.login')->name('login');
 
 Route::post('/login', [AuthController::class, 'login'])
@@ -24,3 +25,13 @@ Route::post('/logout', [AuthController::class, 'logout'])
 Route::resource('armada', ArmadaController::class)
     ->except(['show'])
     ->middleware('auth');
+
+Route::middleware(['auth', 'role:admin,staff'])->group(function () {
+
+    Route::resource('armada', ArmadaController::class)
+        ->except(['show']);
+});
+
+// Khusus Admin
+Route::middleware(['auth', 'role:admin'])->group(function () {
+});
