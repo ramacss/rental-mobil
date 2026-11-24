@@ -30,6 +30,11 @@ Route::middleware(['auth', 'role:admin,staff'])->group(function () {
     Route::resource('armada', ArmadaController::class)
         ->except(['show']);
 
+    Route::redirect('/paket', '/paket-rental');
+
+    Route::resource('paket-rental', \App\Http\Controllers\PaketRentalController::class)
+        ->except(['show']);
+
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.editProfile');
 
