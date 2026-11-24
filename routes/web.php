@@ -49,3 +49,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 });
+
+// Profil Driver
+Route::middleware(['auth', 'role:admin,staff'])->group(function () {
+    Route::redirect('/driver', '/profil_driver');
+
+    Route::resource('profil_driver', \App\Http\Controllers\ProfilDriverController::class);
+});
