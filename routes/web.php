@@ -24,6 +24,27 @@ Route::post('/register', [AuthController::class, 'register'])
 Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
+// Bengkel Maintenance
+Route::middleware(['auth', 'role:admin,staff'])->group(function () {
+    Route::get('/bengkel', [\App\Http\Controllers\BengkelController::class, 'index'])
+        ->name('bengkel.index');
+
+    Route::get('/bengkel/tambah', [\App\Http\Controllers\BengkelController::class, 'create'])
+        ->name('bengkel.create');
+
+    Route::post('/bengkel', [\App\Http\Controllers\BengkelController::class, 'store'])
+        ->name('bengkel.store');
+
+    Route::get('/bengkel/{id}/edit', [\App\Http\Controllers\BengkelController::class, 'edit'])
+        ->name('bengkel.edit');
+
+    Route::put('/bengkel/{id}', [\App\Http\Controllers\BengkelController::class, 'update'])
+        ->name('bengkel.update');
+
+    Route::delete('/bengkel/{id}', [\App\Http\Controllers\BengkelController::class, 'destroy'])
+        ->name('bengkel.destroy');
+});
+
 // Admin dan Staff
 Route::middleware(['auth', 'role:admin,staff'])->group(function () {
 
